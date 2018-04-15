@@ -1,0 +1,15 @@
+> confusion
+# A tibble: 4 x 4
+  predicted actual     n classification
+      <lgl>  <lgl> <int>          <chr>
+1     FALSE  FALSE   133             TN
+2     FALSE   TRUE    13             FN
+3      TRUE  FALSE     2             FP
+4      TRUE   TRUE    32             TP
+> confusion %>% summarize(n = sum(n))
+# A tibble: 1 x 1
+      n
+  <int>
+1   180
+> precision.recall(confusion)
+[1] 0.9411765 0.7111111

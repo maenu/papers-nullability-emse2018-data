@@ -1,0 +1,16 @@
+> dereferenced
+# A tibble: 2 x 2
+  nullness     n
+    <fctr> <int>
+1 NON_NULL    33
+2  UNKNOWN    33
+> ok
+# A tibble: 3 x 3
+# Groups:   nullness [?]
+  nullness                                              comment     n
+    <fctr>                                               <fctr> <int>
+1 NON_NULL                                       invoke dynamic     1
+2 NON_NULL strong() mistakenly classified as getter for boolean     1
+3  UNKNOWN     
+
+no null found
