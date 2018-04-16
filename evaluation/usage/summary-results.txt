@@ -1,0 +1,4 @@
+# A tibble: 1 x 6
+  groupId artifactId version guava commons_io   jre
+    <int>      <int>   <int> <dbl>      <dbl> <dbl>
+1     141        295    1257   272        555  1241
