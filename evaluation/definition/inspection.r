@@ -130,6 +130,132 @@ read.definition <- function(artifact) {
   )
 }
 
+check.definition.integrity <- function(jar, definition) {
+  .definition <- definition %>%
+    mutate(nullness = ifelse(
+      nullness == 'NON_NULL', 
+      'NonNull',
+      ifelse(
+        nullness == 'NULLABLE', 
+        'Nullable',
+        'Unknown')))
+  return(
+    jar %>%
+      select(rootClass,
+             abstract,
+             class,
+             attribute,
+             name,
+             index,
+             primitive) %>%
+      inner_join(
+        .definition %>%
+          select(class,
+                 name,
+                 index,
+                 nullness),
+        by = c('class', 'name', 'index')
+      ) %>%
+      select(rootClass,
+             attribute,
+             name,
+             index,
+             primitive,
+             nullness) %>%
+      unique() %>%
+      group_by(rootClass,
+               attribute,
+               name,
+               index,
+               primitive) %>%
+      filter(n() > 1) %>%
+      summarize(nullness = reduce.annotation(nullness)) %>%
+      ungroup() %>%
+      filter(nullness != 'Unknown') %>%
+      left_join(
+        jar %>%
+          select(rootClass,
+                 class,
+                 name) %>%
+          unique(),
+        by = c('rootClass', 'name')
+      ) %>%
+      inner_join(
+        .definition %>%
+          filter(nullness != 'Unknown') %>%
+          select(class,
+                 name,
+                 index,
+                 nullness),
+        by = c('rootClass' = 'class', 'name', 'index'),
+        suffix = c('.reduced', '.annotated')
+      ) %>%
+      select(
+        rootClass,
+        attribute,
+        name,
+        index,
+        primitive,
+        nullness.reduced,
+        nullness.annotated
+      ) %>%
+      unique() %>%
+      filter(nullness.reduced != nullness.annotated) %>%
+      left_join(
+        jar %>%
+          select(rootClass,
+                 class,
+                 name) %>%
+          unique(),
+        by = c('rootClass', 'name')
+      ) %>%
+      left_join(
+        jaif %>%
+          select(class,
+                 name,
+                 index,
+                 nullness),
+        by = c('class', 'name', 'index')
+      ) %>%
+      arrange(rootClass,
+              attribute,
+              name,
+              index,
+              class)
+  )
+}
+
+check.definition.integrity.disagree <-
+  function(definition.integrity) {
+    return(
+      definition.integrity %>%
+        filter(
+          !is.na(nullness),
+          nullness != 'Unknown',
+          primitive == 'false',
+          (
+            index == -1 &
+              nullness.annotated == 'NonNull' &
+              nullness == 'Nullable' |
+              index > -1 &
+              nullness.annotated == 'Nullable' &
+              nullness == 'NonNull'
+          )
+        ) %>%
+        select(
+          rootClass,
+          class,
+          attribute,
+          name,
+          index,
+          nullness.reduced,
+          nullness.annotated,
+          nullness
+        ) %>%
+        unique()
+    )
+  }
+
 combine.coverage <-
   function (jar,
             jaif,
@@ -271,7 +397,7 @@ combine.jaif.definition <- function(coverage) {
   return(
     coverage %>%
       filter(
-        is.na(jaif.integrity.disagree),!is.na(jaif.known),!is.na(definition.known)
+        is.na(jaif.integrity.disagree), !is.na(jaif.known), !is.na(definition.known)
       ) %>%
       mutate(
         nullness.definition = ifelse(nullness.definition == 'NON_NULL', 'NonNull', 'Nullable'),
@@ -308,6 +434,8 @@ process <- function(artifact) {
   jaif <- read.jaif(artifact)
   jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
   definition <- read.definition(artifact)
+  definition.integrity <- check.definition.integrity(jar, definition)
+  print(check.definition.integrity.disagree(definition.integrity))
   coverage <-
     combine.coverage(jar, jaif, jaif.integrity.disagree, definition)
   write.coverage(artifact, coverage)

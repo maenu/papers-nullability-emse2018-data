@@ -1,4 +1,6 @@
 > process('guava')
+# A tibble: 0 x 8
+# ... with 8 variables: rootClass <chr>, class <chr>, attribute <fctr>, name <chr>, index <int>, nullness.reduced <chr>, nullness.annotated <chr>, nullness <fctr>
 # A tibble: 8 x 5
         use nullness.jaif nullness.definition compatible     n
       <chr>        <fctr>               <chr>      <lgl> <int>
@@ -14,6 +16,8 @@ Warning messages:
 1: Column `class` joining factors with different levels, coercing to character vector 
 2: Column `class` joining character vector and factor, coercing into character vector 
 > process('commons-io')
+# A tibble: 0 x 8
+# ... with 8 variables: rootClass <chr>, class <chr>, attribute <fctr>, name <chr>, index <int>, nullness.reduced <chr>, nullness.annotated <chr>, nullness <fctr>
 # A tibble: 7 x 5
         use nullness.jaif nullness.definition compatible     n
       <chr>        <fctr>               <chr>      <lgl> <int>
@@ -31,4 +35,17 @@ Warning messages:
 > 
 
 definition agrees for what is known, only very few incompatibilities.
+no disagreement within definition
 problem: only judging from for implementations, can only reduce interfaces
+
+incompatible:
+	guava
+		5 incorrect annotations
+		other incorrectly inferred
+	commons-io
+		1 wrong annotation
+		1 incorrectly inferred
+
+guava
+	many jaif return nullable, definition non-null
+	inspecting 30 randomly selected show that definition analysis is correct, they either return a new object or this.
