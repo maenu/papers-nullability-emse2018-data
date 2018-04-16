@@ -1,0 +1,34 @@
+> process('guava')
+# A tibble: 8 x 5
+        use nullness.jaif nullness.definition compatible     n
+      <chr>        <fctr>               <chr>      <lgl> <int>
+1 parameter       NonNull             NonNull       TRUE  2459
+2 parameter       NonNull            Nullable       TRUE    19
+3 parameter      Nullable             NonNull      FALSE     6
+4 parameter      Nullable            Nullable       TRUE   113
+5    return       NonNull             NonNull       TRUE   505
+6    return       NonNull            Nullable      FALSE     4
+7    return      Nullable             NonNull       TRUE   943
+8    return      Nullable            Nullable       TRUE   112
+Warning messages:
+1: Column `class` joining factors with different levels, coercing to character vector 
+2: Column `class` joining character vector and factor, coercing into character vector 
+> process('commons-io')
+# A tibble: 7 x 5
+        use nullness.jaif nullness.definition compatible     n
+      <chr>        <fctr>               <chr>      <lgl> <int>
+1 parameter       NonNull             NonNull       TRUE   232
+2 parameter       NonNull            Nullable       TRUE    68
+3 parameter      Nullable             NonNull      FALSE     1
+4 parameter      Nullable            Nullable       TRUE    61
+5    return       NonNull             NonNull       TRUE    78
+6    return       NonNull            Nullable      FALSE     1
+7    return      Nullable            Nullable       TRUE     9
+Warning messages:
+1: Column `class` joining factor and character vector, coercing into character vector 
+2: Column `class` joining character vector and factor, coercing into character vector 
+> #process('jre')
+> 
+
+definition agrees for what is known, only very few incompatibilities.
+problem: only judging from for implementations, can only reduce interfaces
