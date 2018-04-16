@@ -1,0 +1,158 @@
+class,method,invokes,parameters,comment,location,originClass,originMethod
+com.google.common.base.CharMatcher,javaIsoControl()Lcom/google/common/base/CharMatcher;,false,,ok,,,
+com.google.common.base.CharMatcher$Whitespace,setBits(Ljava/util/BitSet;)V,false,,ok,,,
+com.google.common.base.Converter$1$1,next()Ljava/lang/Object;,true,[UNKNOWN],ok,219:-1,com.google.common.base.Converter,convert(Ljava/lang/Object;)Ljava/lang/Object;
+com.google.common.base.Equivalence,wrap(Ljava/lang/Object;)Lcom/google/common/base/Equivalence$Wrapper;,true,"[NON_NULL,UNKNOWN,NULL]","ok last arg is injected",162:-1,com.google.common.base.Equivalence$Wrapper,<init>(Lcom/google/common/base/Equivalence;Ljava/lang/Object;Lcom/google/common/base/Equivalence$1;)V
+com.google.common.base.Joiner$MapJoiner,appendTo(Ljava/lang/StringBuilder;Ljava/lang/Iterable;)Ljava/lang/StringBuilder;,true,"[UNKNOWN,UNKNOWN]",ok,401:-1,com.google.common.base.Joiner$MapJoiner,appendTo(Ljava/lang/StringBuilder;Ljava/util/Iterator;)Ljava/lang/StringBuilder;
+com.google.common.base.Predicates,compose(Lcom/google/common/base/Predicate;Lcom/google/common/base/Function;)Lcom/google/common/base/Predicate;,true,"[UNKNOWN,UNKNOWN,NULL]","ok last arg is injected",250:-1,com.google.common.base.Predicates$CompositionPredicate,<init>(Lcom/google/common/base/Predicate;Lcom/google/common/base/Function;Lcom/google/common/base/Predicates$1;)V
+com.google.common.base.Throwables,propagateIfPossible(Ljava/lang/Throwable;Ljava/lang/Class;Ljava/lang/Class;)V,true,"[UNKNOWN,UNKNOWN]",ok,204:-1,com.google.common.base.Throwables,propagateIfInstanceOf(Ljava/lang/Throwable;Ljava/lang/Class;)V
+com.google.common.base.Throwables,propagateIfPossible(Ljava/lang/Throwable;Ljava/lang/Class;Ljava/lang/Class;)V,true,"[UNKNOWN,NON_NULL]",ok,205:-1,com.google.common.base.Throwables,propagateIfPossible(Ljava/lang/Throwable;Ljava/lang/Class;)V
+com.google.common.base.Verify,verify(ZLjava/lang/String;Ljava/lang/Object;C)V,true,[UNKNOWN],ok,239:-1,com.google.common.base.VerifyException,<init>(Ljava/lang/String;)V
+com.google.common.base.Verify,verify(ZLjava/lang/String;Ljava/lang/Object;C)V,true,"[UNKNOWN,NON_NULL]",ok,239:-1,com.google.common.base.Preconditions,format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+com.google.common.base.VerifyException,<init>(Ljava/lang/String;)V,false,,ok,,,
+com.google.common.cache.CacheBuilder,getMaximumWeight()J,false,,ok,,,
+com.google.common.cache.LocalCache$AbstractReferenceEntry,getKey()Ljava/lang/Object;,false,,ok,,,
+com.google.common.cache.LocalCache$LoadingSerializationProxy,getUnchecked(Ljava/lang/Object;)Ljava/lang/Object;,true,[UNKNOWN],ok,5008:-1,com.google.common.cache.LoadingCache,getUnchecked(Ljava/lang/Object;)Ljava/lang/Object;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3152:-1,com.google.common.base.Ticker,read()J
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[NON_NULL],ok,3153:-1,com.google.common.cache.LocalCache$Segment,preWriteCleanup(J)V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3159:-1,com.google.common.cache.LocalCache$ReferenceEntry,getNext()Lcom/google/common/cache/LocalCache$ReferenceEntry;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3160:-1,com.google.common.cache.LocalCache$ReferenceEntry,getKey()Ljava/lang/Object;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3161:-1,com.google.common.cache.LocalCache$ReferenceEntry,getHash()I
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[UNKNOWN,UNKNOWN]",param 2 is non-null,3163:-1,com.google.common.base.Equivalence,equivalent(Ljava/lang/Object;Ljava/lang/Object;)Z
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3164:-1,com.google.common.cache.LocalCache$ReferenceEntry,getValueReference()Lcom/google/common/cache/LocalCache$ValueReference;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3165:-1,com.google.common.cache.LocalCache$ValueReference,get()Ljava/lang/Object;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3167:-1,com.google.common.cache.LocalCache$ValueReference,isActive()Z
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,NON_NULL,UNKNOWN,NON_NULL,NULL,NON_NULL,UNKNOWN]",param 3 is non-null,3172:-1,com.google.common.cache.LocalCache$Segment,removeValueFromChain(Lcom/google/common/cache/LocalCache$ReferenceEntry;Lcom/google/common/cache/LocalCache$ReferenceEntry;Ljava/lang/Object;ILjava/lang/Object;Lcom/google/common/cache/LocalCache$ValueReference;Lcom/google/common/cache/RemovalCause;)Lcom/google/common/cache/LocalCache$ReferenceEntry;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[UNKNOWN,NON_NULL,NON_NULL,NON_NULL,UNKNOWN]",ok,3188:-1,com.google.common.cache.LocalCache$Segment,enqueueNotification(Ljava/lang/Object;ILjava/lang/Object;ILcom/google/common/cache/RemovalCause;)V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3189:-1,com.google.common.cache.LocalCache$ValueReference,getWeight()I
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,UNKNOWN,UNKNOWN,NON_NULL]",ok,3190:-1,com.google.common.cache.LocalCache$Segment,setValue(Lcom/google/common/cache/LocalCache$ReferenceEntry;Ljava/lang/Object;Ljava/lang/Object;J)V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[NON_NULL],ok,3191:-1,com.google.common.cache.LocalCache$Segment,evictEntries(Lcom/google/common/cache/LocalCache$ReferenceEntry;)V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3199:-1,com.google.common.cache.LocalCache$Segment,postWriteCleanup()V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3199:-1,com.google.common.cache.LocalCache$Segment,postWriteCleanup()V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3199:-1,com.google.common.cache.LocalCache$Segment,postWriteCleanup()V
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3199:-1,com.google.common.cache.LocalCache$Segment,postWriteCleanup()V
+com.google.common.cache.LocalCache$WeakValueReference,getEntry()Lcom/google/common/cache/LocalCache$ReferenceEntry;,false,,ok,,,
+com.google.common.collect.AbstractBiMap,makeInverse(Ljava/util/Map;)Lcom/google/common/collect/AbstractBiMap;,true,"[UNKNOWN,NON_NULL]",ok,105:-1,com.google.common.collect.AbstractBiMap$Inverse,<init>(Ljava/util/Map;Lcom/google/common/collect/AbstractBiMap;)V
+com.google.common.collect.AbstractBiMap$EntrySet,clear()V,true,[],ok,380:-1,com.google.common.collect.AbstractBiMap,clear()V
+com.google.common.collect.AbstractMapBasedMultiset,entryIterator()Ljava/util/Iterator;,true,"[NON_NULL,UNKNOWN]","ok first arg is injected",87:-1,com.google.common.collect.AbstractMapBasedMultiset$1,<init>(Lcom/google/common/collect/AbstractMapBasedMultiset;Ljava/util/Iterator;)V
+com.google.common.collect.AbstractMultimap,valueSpliterator()Ljava/util/Spliterator;,true,[],ok,233:-1,com.google.common.collect.AbstractMultimap,valueIterator()Ljava/util/Iterator;
+com.google.common.collect.AbstractMultimap,valueSpliterator()Ljava/util/Spliterator;,true,[],ok,233:-1,com.google.common.collect.Multimap,size()I
+com.google.common.collect.AbstractMultiset,elementSet()Ljava/util/Set;,true,[],ok,157:-1,com.google.common.collect.AbstractMultiset,createElementSet()Ljava/util/Set;
+com.google.common.collect.AbstractTable$CellSet,spliterator()Ljava/util/Spliterator;,true,[],ok,164:-1,com.google.common.collect.AbstractTable,cellSpliterator()Ljava/util/Spliterator;
+com.google.common.collect.ArrayListMultimap,toString()Ljava/lang/String;,true,[],"ok inherited, super",65:-1,com.google.common.collect.AbstractMultimap,toString()Ljava/lang/String;
+com.google.common.collect.ConcurrentHashMultiset$1,remove(Ljava/lang/Object;)Z,true,"[UNKNOWN,NON_NULL]",ok,469:-1,com.google.common.collect.Collections2,safeRemove(Ljava/util/Collection;Ljava/lang/Object;)Z
+com.google.common.collect.ConcurrentHashMultiset$FieldSettersHolder,<init>()V,false,,ok,,,
+com.google.common.collect.FilteredKeyListMultimap,removeAll(Ljava/lang/Object;)Ljava/util/Collection;,true,[UNKNOWN],ok,29:-1,com.google.common.collect.FilteredKeyListMultimap,removeAll(Ljava/lang/Object;)Ljava/util/List;
+com.google.common.collect.ForwardingListIterator,nextIndex()I,true,[],ok,61:-1,com.google.common.collect.ForwardingListIterator,delegate()Ljava/util/ListIterator;
+com.google.common.collect.ForwardingNavigableMap,lastEntry()Ljava/util/Map$Entry;,true,[],ok,209:-1,com.google.common.collect.ForwardingNavigableMap,delegate()Ljava/util/NavigableMap;
+com.google.common.collect.HashBiMap,put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;,true,"[UNKNOWN,UNKNOWN,NON_NULL]",ok,262:-1,com.google.common.collect.HashBiMap,put(Ljava/lang/Object;Ljava/lang/Object;Z)Ljava/lang/Object;
+com.google.common.collect.HashBiMap$Inverse,values()Ljava/util/Set;,true,[],ok,650:-1,com.google.common.collect.HashBiMap$Inverse,forward()Lcom/google/common/collect/BiMap;
+com.google.common.collect.ImmutableList$SubList,get(I)Ljava/lang/Object;,true,"[NON_NULL,NON_NULL]",ok,474:-1,com.google.common.base.Preconditions,checkElementIndex(II)I
+com.google.common.collect.ImmutableMapValues,lambda$forEach$0(Ljava/util/function/Consumer;Ljava/lang/Object;Ljava/lang/Object;)V,false,,cannot identify,,,
+com.google.common.collect.ImmutableRangeMap$Builder,put(Lcom/google/common/collect/Range;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableRangeMap$Builder;,true,[],ok,123:-1,com.google.common.collect.Range,isEmpty()Z
+com.google.common.collect.ImmutableRangeMap$Builder,put(Lcom/google/common/collect/Range;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableRangeMap$Builder;,true,"[NON_NULL,NON_NULL,NON_NULL]",ok,123:-1,com.google.common.base.Preconditions,checkArgument(ZLjava/lang/String;Ljava/lang/Object;)V
+com.google.common.collect.ImmutableRangeMap$Builder,put(Lcom/google/common/collect/Range;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableRangeMap$Builder;,true,"[NON_NULL,NON_NULL]",ok,124:-1,com.google.common.collect.Maps,immutableEntry(Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/Map$Entry;
+com.google.common.collect.ImmutableRangeSet,copyOf(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableRangeSet;,true,[UNKNOWN],ok,142:-1,com.google.common.collect.ImmutableRangeSet$Builder,addAll(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableRangeSet$Builder;
+com.google.common.collect.ImmutableRangeSet,copyOf(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableRangeSet;,true,[],ok,142:-1,com.google.common.collect.ImmutableRangeSet$Builder,build()Lcom/google/common/collect/ImmutableRangeSet;
+com.google.common.collect.ImmutableRangeSet,copyOf(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableRangeSet;,true,[],ok,142:-1,com.google.common.collect.ImmutableRangeSet$Builder,<init>()V
+com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,[],ok,498:-1,com.google.common.collect.ImmutableSetMultimap,builder()Lcom/google/common/collect/ImmutableSetMultimap$Builder;
+com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,[],ok,499:-1,com.google.common.collect.ImmutableSet,iterator()Lcom/google/common/collect/UnmodifiableIterator;
+com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,[],missing,499:-1,,entries()
+com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,"[UNKNOWN,UNKNOWN]",ok,500:-1,com.google.common.collect.ImmutableSetMultimap$Builder,put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableSetMultimap$Builder;
+com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,[],ok,502:-1,com.google.common.collect.ImmutableSetMultimap$Builder,build()Lcom/google/common/collect/ImmutableSetMultimap;
+com.google.common.collect.ImmutableSortedMap$Builder,<init>(Ljava/util/Comparator;)V,true,[],implicit super call? weird,480:-1,com.google.common.collect.ImmutableMap$Builder,<init>()V
+com.google.common.collect.Iterators,checkNonnegative(I)V,false,,ok,,,
+com.google.common.collect.LinkedListMultimap$1KeySetImpl,size()I,true,[UNKNOWN],dynamic invoke,714:-1,com.google.common.collect.LinkedListMultimap,access$600(Lcom/google/common/collect/LinkedListMultimap;)Ljava/util/Map;
+com.google.common.collect.LinkedListMultimap$ValueForKeyIterator,remove()V,true,[NON_NULL],ok,551:-1,com.google.common.collect.CollectPreconditions,checkRemove(Z)V
+com.google.common.collect.LinkedListMultimap$ValueForKeyIterator,remove()V,true,"[UNKNOWN,UNKNOWN]",dynamic invoke,558:-1,com.google.common.collect.LinkedListMultimap,access$400(Lcom/google/common/collect/LinkedListMultimap;Lcom/google/common/collect/LinkedListMultimap$Node;)V
+com.google.common.collect.MapMakerInternalMap,clear()V,true,[],ok,2487:-1,com.google.common.collect.MapMakerInternalMap$Segment,clear()V
+com.google.common.collect.MapMakerInternalMap$AbstractWeakKeyEntry,getHash()I,false,,ok,,,
+com.google.common.collect.Maps$FilteredMapValues,remove(Ljava/lang/Object;)Z,true,"[UNKNOWN,UNKNOWN]",ok,2863:-1,com.google.common.base.Objects,equal(Ljava/lang/Object;Ljava/lang/Object;)Z
+com.google.common.collect.Maps$FilteredMapValues,remove(Ljava/lang/Object;)Z,true,[UNKNOWN],ok,2865:-1,com.google.common.base.Predicate,apply(Ljava/lang/Object;)Z
+com.google.common.collect.MultimapBuilder$ListMultimapBuilder,build(Lcom/google/common/collect/Multimap;)Lcom/google/common/collect/ListMultimap;,true,[UNKNOWN],ok,452:-1,com.google.common.collect.MultimapBuilder,build(Lcom/google/common/collect/Multimap;)Lcom/google/common/collect/Multimap;
+com.google.common.collect.Multimaps,lambda$toMultimap$1(Lcom/google/common/collect/Multimap;Lcom/google/common/collect/Multimap;)Lcom/google/common/collect/Multimap;,true,[UNKNOWN],cannot identify,117:-1,com.google.common.collect.Multimap,putAll(Lcom/google/common/collect/Multimap;)Z
+com.google.common.collect.Multimaps$MapMultimap,size()I,false,,ok,,,
+com.google.common.collect.Multisets$MultisetIteratorImpl,hasNext()Z,false,,ok,,,
+com.google.common.collect.Range,<clinit>()V,true,"[UNKNOWN,UNKNOWN]",ok,299:-1,com.google.common.collect.Range,<init>(Lcom/google/common/collect/Cut;Lcom/google/common/collect/Cut;)V
+com.google.common.collect.Range,<clinit>()V,true,[],ok,299:-1,com.google.common.collect.Cut,aboveAll()Lcom/google/common/collect/Cut;
+com.google.common.collect.Range,<clinit>()V,true,[],ok,299:-1,com.google.common.collect.Cut,belowAll()Lcom/google/common/collect/Cut;
+com.google.common.collect.RegularImmutableBiMap,access$100(Lcom/google/common/collect/RegularImmutableBiMap;)[Lcom/google/common/collect/ImmutableMapEntry;,false,,cannot identify,,,
+com.google.common.collect.RegularImmutableBiMap$Inverse$InverseEntrySet,iterator()Lcom/google/common/collect/UnmodifiableIterator;,true,[],ok,258:-1,com.google.common.collect.ImmutableList,iterator()Lcom/google/common/collect/UnmodifiableIterator;
+com.google.common.collect.RegularImmutableSortedMultiset,elementSet()Ljava/util/Set;,false,,ok,,,
+com.google.common.collect.Sets$CartesianSet,equals(Ljava/lang/Object;)Z,true,[UNKNOWN],ok,1471:-1,com.google.common.collect.ImmutableList,equals(Ljava/lang/Object;)Z
+com.google.common.collect.SingletonImmutableTable,<init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V,true,[],implicit super call? weird,35:-1,com.google.common.collect.ImmutableTable,<init>()V
+com.google.common.collect.SortedMultisets$ElementSet,multiset()Lcom/google/common/collect/SortedMultiset;,false,,ok,,,
+com.google.common.collect.StandardTable$Column$EntrySetIterator,<init>(Lcom/google/common/collect/StandardTable$Column;)V,true,[],"ok inherited, super",536:-1,com.google.common.collect.AbstractIterator,<init>()V
+com.google.common.collect.StandardTable$Row,get(Ljava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,NON_NULL]",ok,323:-1,com.google.common.collect.Maps,safeGet(Ljava/util/Map;Ljava/lang/Object;)Ljava/lang/Object;
+com.google.common.collect.Streams$3,<init>(JILjava/util/PrimitiveIterator$OfInt;Lcom/google/common/collect/Streams$IntFunctionWithIndex;)V,false,,"ok inherited, super",,,
+com.google.common.collect.Synchronized,map(Ljava/util/Map;Ljava/lang/Object;)Ljava/util/Map;,true,"[UNKNOWN,UNKNOWN]",ok,1023:-1,com.google.common.collect.Synchronized$SynchronizedMap,<init>(Ljava/util/Map;Ljava/lang/Object;)V
+com.google.common.collect.Synchronized$SynchronizedAsMapValues$1,transform(Ljava/lang/Object;)Ljava/lang/Object;,true,[UNKNOWN],cannot identify,1402:-1,com.google.common.collect.Synchronized$SynchronizedAsMapValues$1,transform(Ljava/util/Collection;)Ljava/util/Collection;
+com.google.common.collect.Synchronized$SynchronizedSetMultimap,removeAll(Ljava/lang/Object;)Ljava/util/Set;,true,[],ok,833:-1,com.google.common.collect.Synchronized$SynchronizedSetMultimap,delegate()Lcom/google/common/collect/SetMultimap;
+com.google.common.collect.Synchronized$SynchronizedSetMultimap,removeAll(Ljava/lang/Object;)Ljava/util/Set;,true,[UNKNOWN],ok,833:-1,com.google.common.collect.SetMultimap,removeAll(Ljava/lang/Object;)Ljava/util/Set;
+com.google.common.collect.TreeMultimap,get(Ljava/lang/Object;)Ljava/util/Set;,true,[UNKNOWN],ok,76:-1,com.google.common.collect.TreeMultimap,get(Ljava/lang/Object;)Ljava/util/NavigableSet;
+com.google.common.collect.TreeMultiset,pollFirstEntry()Lcom/google/common/collect/Multiset$Entry;,true,[],"ok inherited, super",57:-1,com.google.common.collect.AbstractSortedMultiset,pollFirstEntry()Lcom/google/common/collect/Multiset$Entry;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,518:-1,com.google.common.collect.Range,hasLowerBound()Z
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,522:-1,com.google.common.collect.Range,lowerEndpoint()Ljava/lang/Comparable;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,523:-1,com.google.common.collect.Range,lowerBoundType()Lcom/google/common/collect/BoundType;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[UNKNOWN],ok,529:-1,com.google.common.collect.Iterators,peekingIterator(Ljava/util/Iterator;)Lcom/google/common/collect/PeekingIterator;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[UNKNOWN],ok,531:-1,com.google.common.collect.Range,contains(Ljava/lang/Comparable;)Z
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,531:-1,com.google.common.collect.Cut,belowAll()Lcom/google/common/collect/Cut;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,533:-1,com.google.common.collect.Cut,belowAll()Lcom/google/common/collect/Cut;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,535:-1,com.google.common.collect.PeekingIterator,next()Ljava/lang/Object;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],ok,537:-1,com.google.common.collect.Iterators,emptyIterator()Lcom/google/common/collect/UnmodifiableIterator;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,"[NON_NULL,UNKNOWN,NON_NULL]","ok injected",539:-1,com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound$1,<init>(Lcom/google/common/collect/TreeRangeSet$ComplementRangesByLowerBound;Lcom/google/common/collect/Cut;Lcom/google/common/collect/PeekingIterator;)V
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],"ok wrong line number, 532",539:-1,com.google.common.collect.PeekingIterator,peek()Ljava/lang/Object;
+com.google.common.collect.TreeRangeSet$ComplementRangesByLowerBound,entryIterator()Ljava/util/Iterator;,true,[],"ok wrong line number, 532",539:-1,com.google.common.collect.Cut,belowAll()Lcom/google/common/collect/Cut;
+com.google.common.collect.TreeRangeSet$SubRangeSet,clear()V,true,[UNKNOWN],ok,920:-1,com.google.common.collect.TreeRangeSet,remove(Lcom/google/common/collect/Range;)V
+com.google.common.eventbus.EventBus,handleSubscriberException(Ljava/lang/Throwable;Lcom/google/common/eventbus/SubscriberExceptionContext;)V,true,"[NON_NULL,NON_NULL]",ok,175:-1,com.google.common.eventbus.SubscriberExceptionHandler,handleException(Ljava/lang/Throwable;Lcom/google/common/eventbus/SubscriberExceptionContext;)V
+com.google.common.eventbus.SubscriberRegistry,flattenHierarchy(Ljava/lang/Class;)Lcom/google/common/collect/ImmutableSet;,true,[UNKNOWN],ok,231:-1,com.google.common.cache.LoadingCache,getUnchecked(Ljava/lang/Object;)Ljava/lang/Object;
+com.google.common.eventbus.SubscriberRegistry,flattenHierarchy(Ljava/lang/Class;)Lcom/google/common/collect/ImmutableSet;,true,[UNKNOWN],ok,233:-1,com.google.common.base.Throwables,propagate(Ljava/lang/Throwable;)Ljava/lang/RuntimeException;
+com.google.common.graph.AbstractNetwork$1,edges()Ljava/util/Set;,true,[],ok,62:-1,com.google.common.graph.Network,allowsParallelEdges()Z
+com.google.common.graph.AbstractNetwork$1,edges()Ljava/util/Set;,true,[],ok,63:-1,com.google.common.graph.AbstractGraph,edges()Ljava/util/Set;
+com.google.common.graph.AbstractNetwork$1,edges()Ljava/util/Set;,true,[NON_NULL],"ok injected",67:-1,com.google.common.graph.AbstractNetwork$1$1,<init>(Lcom/google/common/graph/AbstractNetwork$1;)V
+com.google.common.graph.ConfigurableNetwork,successors(Ljava/lang/Object;)Ljava/util/Set;,true,[],ok,174:-1,com.google.common.graph.NetworkConnections,successors()Ljava/util/Set;
+com.google.common.graph.ConfigurableNetwork,successors(Ljava/lang/Object;)Ljava/util/Set;,true,[UNKNOWN],ok,174:-1,com.google.common.graph.ConfigurableNetwork,checkedConnections(Ljava/lang/Object;)Lcom/google/common/graph/NetworkConnections;
+com.google.common.graph.DirectedMultiNetworkConnections,getReference(Ljava/lang/ref/Reference;)Ljava/lang/Object;,false,,ok,,,
+com.google.common.graph.Graphs$NodeVisitState,<init>(Ljava/lang/String;I)V,false,,"ok inherited, super",,,
+com.google.common.hash.AbstractHasher,putBytes([B)Lcom/google/common/hash/Hasher;,true,"[NON_NULL,NON_NULL,NON_NULL]",ok,60:-1,com.google.common.hash.AbstractHasher,putBytes([BII)Lcom/google/common/hash/Hasher;
+com.google.common.hash.AbstractHasher,putBytes([BII)Lcom/google/common/hash/PrimitiveSink;,true,"[UNKNOWN,NON_NULL,NON_NULL]",cannot find call,28:-1,com.google.common.hash.AbstractHasher,putBytes([BII)Lcom/google/common/hash/Hasher;
+com.google.common.hash.BloomFilter,writeTo(Ljava/io/OutputStream;)V,true,[NON_NULL],ok,568:-1,com.google.common.primitives.SignedBytes,checkedCast(J)B
+com.google.common.hash.BloomFilter,writeTo(Ljava/io/OutputStream;)V,true,[],ok,568:-1,com.google.common.hash.BloomFilter$Strategy,ordinal()I
+com.google.common.hash.BloomFilter,writeTo(Ljava/io/OutputStream;)V,true,[NON_NULL],ok,569:-1,com.google.common.primitives.UnsignedBytes,checkedCast(J)B
+com.google.common.hash.HashCode$BytesHashCode,asInt()I,true,"[NON_NULL,NON_NULL,NON_NULL]",ok,278:-1,com.google.common.base.Preconditions,checkState(ZLjava/lang/String;I)V
+com.google.common.hash.Hashing$Md5Holder,<init>()V,false,,"ok inherited, super",,,
+com.google.common.io.BaseEncoding$StandardBaseEncoding$1,write(I)V,true,[NON_NULL],ok,602:-1,com.google.common.io.BaseEncoding$Alphabet,encode(I)C
+com.google.common.io.Closer,register(Ljava/io/Closeable;)Ljava/io/Closeable;,false,,ok,,,
+com.google.common.io.CountingInputStream,mark(I)V,false,,ok,,,
+com.google.common.io.FileBackedOutputStream,close()V,false,,ok,,,
+com.google.common.math.LongMath,log10Floor(J)I,true,"[NON_NULL,NON_NULL]",ok,200:-1,com.google.common.math.LongMath,lessThanBranchFree(JJ)I
+com.google.common.math.Quantiles,intsToDoubles([I)[D,false,,ok,,,
+com.google.common.primitives.Booleans,indexOf([ZZII)I,false,,ok,,,
+com.google.common.primitives.Bytes$ByteArrayAsList,size()I,false,,ok,,,
+com.google.common.primitives.Doubles,concat([[D)[D,false,,ok,,,
+com.google.common.primitives.Doubles$LexicographicalComparator,toString()Ljava/lang/String;,false,,ok,,,
+com.google.common.primitives.Floats$FloatArrayAsList,hashCode()I,true,[NON_NULL],ok,618:-1,com.google.common.primitives.Floats,hashCode(F)I
+com.google.common.primitives.ImmutableLongArray,access$000(Lcom/google/common/primitives/ImmutableLongArray;)[J,false,,cannot identify,,,
+com.google.common.primitives.Ints$LexicographicalComparator,<clinit>()V,true,"[NON_NULL,NON_NULL]",cannot find call,439:-1,com.google.common.primitives.Ints$LexicographicalComparator,<init>(Ljava/lang/String;I)V
+com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,126:-1,com.google.common.base.Preconditions,checkArgument(Z)V
+com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,127:-1,com.google.common.primitives.UnsignedInts,flip(I)I
+com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,129:-1,com.google.common.primitives.UnsignedInts,flip(I)I
+com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,134:-1,com.google.common.primitives.UnsignedInts,flip(I)I
+com.google.common.reflect.Types$JavaVersion$4,newArrayType(Ljava/lang/reflect/Type;)Ljava/lang/reflect/Type;,true,[UNKNOWN],ok,607:-1,com.google.common.reflect.Types$JavaVersion,newArrayType(Ljava/lang/reflect/Type;)Ljava/lang/reflect/Type;
+com.google.common.reflect.Types$WildcardTypeImpl,toString()Ljava/lang/String;,true,[],ok,509:-1,com.google.common.collect.ImmutableList,iterator()Lcom/google/common/collect/UnmodifiableIterator;
+com.google.common.reflect.Types$WildcardTypeImpl,toString()Ljava/lang/String;,true,[UNKNOWN],ok,510:-1,com.google.common.reflect.Types$JavaVersion,typeName(Ljava/lang/reflect/Type;)Ljava/lang/String;
+com.google.common.reflect.Types$WildcardTypeImpl,toString()Ljava/lang/String;,true,[UNKNOWN],ok,512:-1,com.google.common.reflect.Types,access$700(Ljava/lang/Iterable;)Ljava/lang/Iterable;
+com.google.common.reflect.Types$WildcardTypeImpl,toString()Ljava/lang/String;,true,[UNKNOWN],ok,513:-1,com.google.common.reflect.Types$JavaVersion,typeName(Ljava/lang/reflect/Type;)Ljava/lang/String;
+com.google.common.util.concurrent.AbstractExecutionThreadService,startAsync()Lcom/google/common/util/concurrent/Service;,true,[],ok,204:-1,com.google.common.util.concurrent.Service,startAsync()Lcom/google/common/util/concurrent/Service;
+com.google.common.util.concurrent.AbstractFuture,isDone()Z,false,,ok,,,
+com.google.common.util.concurrent.AbstractService,state()Lcom/google/common/util/concurrent/Service$State;,true,[],ok,452:-1,com.google.common.util.concurrent.AbstractService$StateSnapshot,externalState()Lcom/google/common/util/concurrent/Service$State;
+com.google.common.util.concurrent.CycleDetectingLockFactory$PotentialDeadlockException,getConflictingStackTrace()Lcom/google/common/util/concurrent/CycleDetectingLockFactory$ExampleStackTrace;,false,,ok,,,
+com.google.common.util.concurrent.ForwardingBlockingDeque,<init>()V,true,[],"ok inherited, super",51:-1,com.google.common.collect.ForwardingDeque,<init>()V
+com.google.common.util.concurrent.ForwardingBlockingDeque,drainTo(Ljava/util/Collection;I)I,true,[],ok,128:-1,com.google.common.util.concurrent.ForwardingBlockingDeque,delegate()Ljava/util/concurrent/BlockingDeque;
+com.google.common.util.concurrent.ForwardingCheckedFuture$SimpleForwardingCheckedFuture,delegate()Lcom/google/common/util/concurrent/ListenableFuture;,false,,ok,,,
+com.google.common.util.concurrent.Monitor,access$000(Lcom/google/common/util/concurrent/Monitor;)Ljava/util/concurrent/locks/ReentrantLock;,false,,cannot identify,,,
+com.google.common.util.concurrent.MoreExecutors$ScheduledListeningDecorator,<init>(Ljava/util/concurrent/ScheduledExecutorService;)V,true,[UNKNOWN],ok,596:-1,com.google.common.util.concurrent.MoreExecutors$ListeningDecorator,<init>(Ljava/util/concurrent/ExecutorService;)V
+com.google.common.util.concurrent.RateLimiter,create(DJLjava/util/concurrent/TimeUnit;DLcom/google/common/util/concurrent/RateLimiter$SleepingStopwatch;)Lcom/google/common/util/concurrent/RateLimiter;,true,"[UNKNOWN,NON_NULL,UNKNOWN,NON_NULL]",ok,167:-1,com.google.common.util.concurrent.SmoothRateLimiter$SmoothWarmingUp,<init>(Lcom/google/common/util/concurrent/RateLimiter$SleepingStopwatch;JLjava/util/concurrent/TimeUnit;D)V
+com.google.common.util.concurrent.RateLimiter,create(DJLjava/util/concurrent/TimeUnit;DLcom/google/common/util/concurrent/RateLimiter$SleepingStopwatch;)Lcom/google/common/util/concurrent/RateLimiter;,true,[NON_NULL],ok,168:-1,com.google.common.util.concurrent.RateLimiter,setRate(D)V
+com.google.common.util.concurrent.SettableFuture,set(Ljava/lang/Object;)Z,true,[UNKNOWN],ok,48:-1,com.google.common.util.concurrent.AbstractFuture,set(Ljava/lang/Object;)Z
+com.google.common.util.concurrent.TrustedListenableFutureTask$TrustedFutureInterruptibleTask,runInterruptibly()Ljava/lang/Object;,false,,ok,,,

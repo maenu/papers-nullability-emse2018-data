@@ -14,3 +14,4 @@
 3  UNKNOWN     
 
 no null found
+problems only with one wrong getter and invoke dynamic
