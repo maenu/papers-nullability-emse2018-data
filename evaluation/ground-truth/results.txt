@@ -1,0 +1,33 @@
+> process('guava')
+# A tibble: 2 x 4
+# Groups:   attribute, nullness.annotated [?]
+  attribute nullness.annotated nullness.reduced `n()`
+     <fctr>             <fctr>            <chr> <int>
+1     field            NonNull         Nullable     1
+2    method            NonNull         Nullable   234
+Warning messages:
+1: Column `class` joining factors with different levels, coercing to character vector 
+2: Column `rootClass`/`class` joining factors with different levels, coercing to character vector 
+3: Column `rootClass` joining character vector and factor, coercing into character vector 
+4: Column `class` joining factors with different levels, coercing to character vector 
+5: Column `class` joining factors with different levels, coercing to character vector 
+> process('commons-io')
+# A tibble: 0 x 4
+# Groups:   attribute, nullness.annotated [?]
+# ... with 4 variables: attribute <fctr>, nullness.annotated <fctr>, nullness.reduced <lgl>, n() <int>
+Warning messages:
+1: Column `rootClass`/`class` joining factors with different levels, coercing to character vector 
+2: Column `rootClass` joining character vector and factor, coercing into character vector 
+> process('jre')
+# A tibble: 0 x 4
+# Groups:   attribute, nullness.annotated [?]
+# ... with 4 variables: attribute <fctr>, nullness.annotated <fctr>, nullness.reduced <chr>, n() <int>
+Warning messages:
+1: Column `class` joining factors with different levels, coercing to character vector 
+2: Column `rootClass`/`class` joining factors with different levels, coercing to character vector 
+3: Column `rootClass` joining character vector and factor, coercing into character vector 
+4: Column `class` joining factors with different levels, coercing to character vector 
+5: Column `class` joining factors with different levels, coercing to character vector 
+> 
+
+only guava has a few disagreement, 234 methods overriding a non-null method as nullable
