@@ -9,7 +9,7 @@ reduce.annotation <- function(nullness) {
   # verify that jaif is consistent
   nullness <- data.frame(nullness = nullness) %>%
     filter(nullness != 'Unknown',
-           nullness != '',!is.na(nullness)) %>%
+           nullness != '', !is.na(nullness)) %>%
     unique()
   if (nullness %>% nrow() == 1) {
     return(nullness %>%
@@ -29,7 +29,7 @@ reduce.nullness <- function(nullness) {
   # reduce nullness on overriden method return types, only one should be not unknown
   nullness <- data.frame(nullness = nullness) %>%
     filter(nullness != 'UNKNOWN',
-           nullness != '',!is.na(nullness)) %>%
+           nullness != '', !is.na(nullness)) %>%
     unique()
   if (nullness %>% nrow() == 1) {
     return(nullness %>%
@@ -124,7 +124,7 @@ read.definition <- function(artifact) {
         as.character(nullness.original),
         as.character(nullness.reduced)
       )) %>%
-      select(-nullness.reduced, -nullness.original) %>%
+      select(-nullness.reduced,-nullness.original) %>%
       unique() %>%
       filter(nullness != '') %>%
       ungroup() %>%
@@ -484,34 +484,37 @@ infer.nullness <- function(inference, min.n.usage) {
            )))
 }
 
-as.confusion <- function(nullness.inferred, nullness.actual_, nullness.other_) {
-  return(
-    nullness.inferred %>%
-      mutate(
-        nullness.usage = ifelse(
-          nullness.usage == nullness.actual_,
-          nullness.usage,
-          nullness.other_
-        ),
-        classification = ifelse(
-          nullness.actual == nullness.actual_,
-          ifelse(nullness.usage == nullness.actual, 'tp', 'fn'),
-          ifelse(nullness.usage == nullness.actual, 'tn', 'fp')
-        )
-      ) %>%
-      group_by(classification) %>%
-      summarize(n = n()) %>%
-      ungroup() %>%
-      spread(classification, n) %>%
-      mutate(
-        tp = ifelse('tp' %in% names(.), tp, 0),
-        fn = ifelse('fn' %in% names(.), fn, 0),
-        tn = ifelse('tn' %in% names(.), tn, 0),
-        fp = ifelse('fp' %in% names(.), fp, 0)
-      ) %>%
-      unlist()
-  )
-}
+as.confusion <-
+  function(nullness.inferred,
+           nullness.actual_,
+           nullness.other_) {
+    return(
+      nullness.inferred %>%
+        mutate(
+          nullness.usage = ifelse(
+            nullness.usage == nullness.actual_,
+            nullness.usage,
+            nullness.other_
+          ),
+          classification = ifelse(
+            nullness.actual == nullness.actual_,
+            ifelse(nullness.usage == nullness.actual, 'tp', 'fn'),
+            ifelse(nullness.usage == nullness.actual, 'tn', 'fp')
+          )
+        ) %>%
+        group_by(classification) %>%
+        summarize(n = n()) %>%
+        ungroup() %>%
+        spread(classification, n) %>%
+        mutate(
+          tp = ifelse('tp' %in% names(.), tp, 0),
+          fn = ifelse('fn' %in% names(.), fn, 0),
+          tn = ifelse('tn' %in% names(.), tn, 0),
+          fp = ifelse('fp' %in% names(.), fp, 0)
+        ) %>%
+        unlist()
+    )
+  }
 
 precision.recall <- function(confusion) {
   tp <- confusion['tp'] %>% first()
@@ -534,7 +537,7 @@ precision.recall <- function(confusion) {
 
 evaluate.perfomance <- function(inference) {
   .r <- data.frame()
-  for (x in c(1, 2, 3, 4, 5, 10, 20, 50, 100)) {
+  for (x in c(1, 3, 10, 30, 100, 300, 1000, 3000, 10000)) {
     nullness.inferred <- infer.nullness(inference, x)
     row <-
       precision.recall(as.confusion(nullness.inferred, 'Nullable', 'NonNull'))
@@ -584,12 +587,12 @@ plot.performance <- function (performance, performance.stats) {
           performance.stats['NonNull']
         ),
         color = NULL,
-        x = 'min support (log10)',
+        x = 'minimal support (log10)',
         y = 'precision / recall'
       ) +
       ylim(c(0, 1)) +
       scale_x_log10(
-        breaks = c(1, 2, 3, 4, 5, 10, 20, 50, 100),
+        breaks = c(1, 3, 10, 30, 100, 300, 1000, 3000, 10000),
         minor_breaks = NULL
       )
   )
@@ -604,7 +607,7 @@ write.performance <-
            nullness_) {
     plot.performance(performance %>% filter(nullness == nullness_),
                      performance.stats) +
-      labs(title = paste0(use_, ' ', nullness_, ' inferrence from ', ground.truth)) +
+      labs(title = paste0(use_, ' ', nullness_, ' inference vs. ', ground.truth)) +
       ggsave(
         paste0(
           'evaluation/usage/',
@@ -677,17 +680,3 @@ process <- function(artifact) {
 process('guava')
 process('commons-io')
 process('jre')
-
-artifact <- 'guava'
-jar <- read.jar(artifact)
-jaif <- read.jaif(artifact)
-jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
-definition <- read.definition(artifact)
-usage <- read.usage(artifact)
-coverage <-
-  combine.coverage(jar, jaif, jaif.integrity.disagree, definition, usage)
-write.coverage(artifact, coverage)
-inference <-
-  combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
-inference.merged <- merge.inference(inference)
-evaluate.performance.ground.truth.use(artifact, inference.merged)
