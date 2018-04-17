@@ -18,7 +18,7 @@ confusion <- read.csv(file = 'evaluation/getter/inspection.csv') %>%
     ifelse(predicted, 'FP', 'TN')
   )) %>%
   ungroup() %>%
-  arrange(predicted, predicted)
+  arrange(predicted, actual)
 
 classification.size <- function (data, classification_) {
   s <- data %>%
