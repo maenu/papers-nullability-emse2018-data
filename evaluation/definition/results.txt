@@ -40,8 +40,8 @@ problem: only judging from for implementations, can only reduce interfaces
 
 incompatible:
 	guava
-		5 incorrect annotations
-		other incorrectly inferred
+		5 incorrect annotations, return null are annotated nonnull, 1 nullable annotation contains checknotnull
+		5 other incorrectly inferred
 	commons-io
 		1 wrong annotation
 		1 incorrectly inferred

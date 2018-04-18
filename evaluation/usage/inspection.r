@@ -283,7 +283,7 @@ combine.coverage.filter <-
 
 write.coverage <- function(artifact, coverage) {
   .sets <- c(
-    'jar.public',
+    'jar',
     'jaif.known',
     'jaif.integrity.disagree',
     'definition.known',
@@ -605,9 +605,12 @@ write.performance <-
            ground.truth,
            use_,
            nullness_) {
+    h_ <- performance.stats[nullness_] / sum(performance.stats)
     plot.performance(performance %>% filter(nullness == nullness_),
                      performance.stats) +
       labs(title = paste0(use_, ' ', nullness_, ' inference vs. ', ground.truth)) +
+      geom_hline(data = h_, yintercept = h_) +
+      geom_text(x = 0, y = h_, label = 'constant precision', vjust = -1, hjust = -2) +
       ggsave(
         paste0(
           'evaluation/usage/',
