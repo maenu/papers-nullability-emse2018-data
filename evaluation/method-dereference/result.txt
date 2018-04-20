@@ -2,12 +2,11 @@
 # A tibble: 1 x 2
   methods dereferences
     <int>        <int>
-1      19           21
+1      21           23
 > ok
 # A tibble: 2 x 2
                           comment     n
                            <fctr> <int>
-1          cannot identify origin     2
 2 cannot identify which one it is     2
 
 dynamic invokes, not directly mappable to source code

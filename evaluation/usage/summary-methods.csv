@@ -1,0 +1,11 @@
+artifactId,type,internal,methods,n
+commons-io,invocation,false,128,3782
+jre,invocation,false,5597,1152324
+guava,invocation,false,695,10081
+commons-io,invocation,true,188,456
+guava,invocation,true,4101,11580
+guava,dereference,true,481,1391
+jre,dereference,false,1290,287583
+commons-io,dereference,false,27,295
+guava,dereference,false,226,3828
+commons-io,dereference,true,7,8

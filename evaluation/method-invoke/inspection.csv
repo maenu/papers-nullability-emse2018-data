@@ -22,7 +22,7 @@ com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3164:-1,com.google.common.cache.LocalCache$ReferenceEntry,getValueReference()Lcom/google/common/cache/LocalCache$ValueReference;
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3165:-1,com.google.common.cache.LocalCache$ValueReference,get()Ljava/lang/Object;
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3167:-1,com.google.common.cache.LocalCache$ValueReference,isActive()Z
-com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,NON_NULL,UNKNOWN,NON_NULL,NULL,NON_NULL,UNKNOWN]",param 3 is non-null,3172:-1,com.google.common.cache.LocalCache$Segment,removeValueFromChain(Lcom/google/common/cache/LocalCache$ReferenceEntry;Lcom/google/common/cache/LocalCache$ReferenceEntry;Ljava/lang/Object;ILjava/lang/Object;Lcom/google/common/cache/LocalCache$ValueReference;Lcom/google/common/cache/RemovalCause;)Lcom/google/common/cache/LocalCache$ReferenceEntry;
+com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,NON_NULL,UNKNOWN,NON_NULL,NULL,NON_NULL,UNKNOWN]","param 3 is non-null, same as above, probably bug because nullness is taken from value, not deref",3172:-1,com.google.common.cache.LocalCache$Segment,removeValueFromChain(Lcom/google/common/cache/LocalCache$ReferenceEntry;Lcom/google/common/cache/LocalCache$ReferenceEntry;Ljava/lang/Object;ILjava/lang/Object;Lcom/google/common/cache/LocalCache$ValueReference;Lcom/google/common/cache/RemovalCause;)Lcom/google/common/cache/LocalCache$ReferenceEntry;
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[UNKNOWN,NON_NULL,NON_NULL,NON_NULL,UNKNOWN]",ok,3188:-1,com.google.common.cache.LocalCache$Segment,enqueueNotification(Ljava/lang/Object;ILjava/lang/Object;ILcom/google/common/cache/RemovalCause;)V
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,[],ok,3189:-1,com.google.common.cache.LocalCache$ValueReference,getWeight()I
 com.google.common.cache.LocalCache$Segment,replace(Ljava/lang/Object;ILjava/lang/Object;)Ljava/lang/Object;,true,"[NON_NULL,UNKNOWN,UNKNOWN,NON_NULL]",ok,3190:-1,com.google.common.cache.LocalCache$Segment,setValue(Lcom/google/common/cache/LocalCache$ReferenceEntry;Ljava/lang/Object;Ljava/lang/Object;J)V
@@ -62,9 +62,9 @@ com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collec
 com.google.common.collect.ImmutableSetMultimap,invert()Lcom/google/common/collect/ImmutableSetMultimap;,true,[],ok,502:-1,com.google.common.collect.ImmutableSetMultimap$Builder,build()Lcom/google/common/collect/ImmutableSetMultimap;
 com.google.common.collect.ImmutableSortedMap$Builder,<init>(Ljava/util/Comparator;)V,true,[],implicit super call? weird,480:-1,com.google.common.collect.ImmutableMap$Builder,<init>()V
 com.google.common.collect.Iterators,checkNonnegative(I)V,false,,ok,,,
-com.google.common.collect.LinkedListMultimap$1KeySetImpl,size()I,true,[UNKNOWN],dynamic invoke,714:-1,com.google.common.collect.LinkedListMultimap,access$600(Lcom/google/common/collect/LinkedListMultimap;)Ljava/util/Map;
+com.google.common.collect.LinkedListMultimap$1KeySetImpl,size()I,true,[UNKNOWN],synthetic method,714:-1,com.google.common.collect.LinkedListMultimap,access$600(Lcom/google/common/collect/LinkedListMultimap;)Ljava/util/Map;
 com.google.common.collect.LinkedListMultimap$ValueForKeyIterator,remove()V,true,[NON_NULL],ok,551:-1,com.google.common.collect.CollectPreconditions,checkRemove(Z)V
-com.google.common.collect.LinkedListMultimap$ValueForKeyIterator,remove()V,true,"[UNKNOWN,UNKNOWN]",dynamic invoke,558:-1,com.google.common.collect.LinkedListMultimap,access$400(Lcom/google/common/collect/LinkedListMultimap;Lcom/google/common/collect/LinkedListMultimap$Node;)V
+com.google.common.collect.LinkedListMultimap$ValueForKeyIterator,remove()V,true,"[UNKNOWN,UNKNOWN]",synthetic method,558:-1,com.google.common.collect.LinkedListMultimap,access$400(Lcom/google/common/collect/LinkedListMultimap;Lcom/google/common/collect/LinkedListMultimap$Node;)V
 com.google.common.collect.MapMakerInternalMap,clear()V,true,[],ok,2487:-1,com.google.common.collect.MapMakerInternalMap$Segment,clear()V
 com.google.common.collect.MapMakerInternalMap$AbstractWeakKeyEntry,getHash()I,false,,ok,,,
 com.google.common.collect.Maps$FilteredMapValues,remove(Ljava/lang/Object;)Z,true,"[UNKNOWN,UNKNOWN]",ok,2863:-1,com.google.common.base.Objects,equal(Ljava/lang/Object;Ljava/lang/Object;)Z
@@ -76,7 +76,7 @@ com.google.common.collect.Multisets$MultisetIteratorImpl,hasNext()Z,false,,ok,,,
 com.google.common.collect.Range,<clinit>()V,true,"[UNKNOWN,UNKNOWN]",ok,299:-1,com.google.common.collect.Range,<init>(Lcom/google/common/collect/Cut;Lcom/google/common/collect/Cut;)V
 com.google.common.collect.Range,<clinit>()V,true,[],ok,299:-1,com.google.common.collect.Cut,aboveAll()Lcom/google/common/collect/Cut;
 com.google.common.collect.Range,<clinit>()V,true,[],ok,299:-1,com.google.common.collect.Cut,belowAll()Lcom/google/common/collect/Cut;
-com.google.common.collect.RegularImmutableBiMap,access$100(Lcom/google/common/collect/RegularImmutableBiMap;)[Lcom/google/common/collect/ImmutableMapEntry;,false,,cannot identify,,,
+com.google.common.collect.RegularImmutableBiMap,access$100(Lcom/google/common/collect/RegularImmutableBiMap;)[Lcom/google/common/collect/ImmutableMapEntry;,false,,ok,,,
 com.google.common.collect.RegularImmutableBiMap$Inverse$InverseEntrySet,iterator()Lcom/google/common/collect/UnmodifiableIterator;,true,[],ok,258:-1,com.google.common.collect.ImmutableList,iterator()Lcom/google/common/collect/UnmodifiableIterator;
 com.google.common.collect.RegularImmutableSortedMultiset,elementSet()Ljava/util/Set;,false,,ok,,,
 com.google.common.collect.Sets$CartesianSet,equals(Ljava/lang/Object;)Z,true,[UNKNOWN],ok,1471:-1,com.google.common.collect.ImmutableList,equals(Ljava/lang/Object;)Z
@@ -132,7 +132,7 @@ com.google.common.primitives.Bytes$ByteArrayAsList,size()I,false,,ok,,,
 com.google.common.primitives.Doubles,concat([[D)[D,false,,ok,,,
 com.google.common.primitives.Doubles$LexicographicalComparator,toString()Ljava/lang/String;,false,,ok,,,
 com.google.common.primitives.Floats$FloatArrayAsList,hashCode()I,true,[NON_NULL],ok,618:-1,com.google.common.primitives.Floats,hashCode(F)I
-com.google.common.primitives.ImmutableLongArray,access$000(Lcom/google/common/primitives/ImmutableLongArray;)[J,false,,cannot identify,,,
+com.google.common.primitives.ImmutableLongArray,access$000(Lcom/google/common/primitives/ImmutableLongArray;)[J,false,,ok,,,
 com.google.common.primitives.Ints$LexicographicalComparator,<clinit>()V,true,"[NON_NULL,NON_NULL]",cannot find call,439:-1,com.google.common.primitives.Ints$LexicographicalComparator,<init>(Ljava/lang/String;I)V
 com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,126:-1,com.google.common.base.Preconditions,checkArgument(Z)V
 com.google.common.primitives.UnsignedInts,min([I)I,true,[NON_NULL],ok,127:-1,com.google.common.primitives.UnsignedInts,flip(I)I

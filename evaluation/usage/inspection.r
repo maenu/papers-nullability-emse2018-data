@@ -282,13 +282,11 @@ combine.coverage.filter <-
   }
 
 write.coverage <- function(artifact, coverage) {
-  .sets <- c(
-    'jar',
-    'jaif.known',
-    'jaif.integrity.disagree',
-    'definition.known',
-    'usage'
-  )
+  .sets <- c('jar',
+             'jaif.known',
+             'jaif.integrity.disagree',
+             'definition.known',
+             'usage')
   pdf(paste0(
     'evaluation/usage/',
     artifact,
@@ -417,7 +415,13 @@ combine.inference <-
             nullness.usage.null,
             nullness.usage.non.null
           ),
-          nullability = nullability.evidence / n.usage
+          non.nullability.evidence = ifelse(
+            use == 'return',
+            nullness.usage.non.null,
+            nullness.usage.null
+          ),
+          nullability = nullability.evidence / n.usage,
+          non.nullability = non.nullability.evidence / n.usage
         )
     )
   }
@@ -448,7 +452,13 @@ merge.inference <- function(inference) {
           nullness.usage.null,
           nullness.usage.non.null
         ),
-        nullability = nullability.evidence / n.usage
+        non.nullability.evidence = ifelse(
+          use == 'return',
+          nullness.usage.non.null,
+          nullness.usage.null
+        ),
+        nullability = nullability.evidence / n.usage,
+        non.nullability = non.nullability.evidence / n.usage
       )
   )
 }
@@ -610,7 +620,13 @@ write.performance <-
                      performance.stats) +
       labs(title = paste0(use_, ' ', nullness_, ' inference vs. ', ground.truth)) +
       geom_hline(data = h_, yintercept = h_) +
-      geom_text(x = 0, y = h_, label = 'constant precision', vjust = -1, hjust = -2) +
+      geom_text(
+        x = 0,
+        y = h_,
+        label = 'constant precision',
+        vjust = -1,
+        hjust = -2
+      ) +
       ggsave(
         paste0(
           'evaluation/usage/',
@@ -664,6 +680,10 @@ evaluate.performance.ground.truth.use <-
     evaluate.performance.ground.truth(artifact, filter.inference.jaif(inference), 'jaif')
   }
 
+write.usage.clean <- function(artifact, usage) {
+  write.csv(usage, file = paste0('evaluation/usage/', artifact, '-clean.csv'))
+}
+
 process <- function(artifact) {
   jar <- read.jar(artifact)
   jaif <- read.jaif(artifact)
@@ -677,9 +697,176 @@ process <- function(artifact) {
     combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
   inference.merged <- merge.inference(inference)
   evaluate.performance.ground.truth.use(artifact, inference.merged)
+  write.usage.clean(artifact, usage)
   return()
 }
 
 process('guava')
 process('commons-io')
 process('jre')
+
+artifact <- 'jre'
+jar <- read.jar(artifact)
+jaif <- read.jaif(artifact)
+jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
+definition <- read.definition(artifact)
+usage <- read.usage(artifact)
+coverage <-
+  combine.coverage(jar, jaif, jaif.integrity.disagree, definition, usage)
+write.coverage(artifact, coverage)
+inference <-
+  combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
+inference.merged <- merge.inference(inference)
+
+
+
+
+
+
+infer.nullness <- function(inference, min.n.usage) {
+  return(inference %>% mutate(
+    nullness.usage = ifelse(
+      use == 'parameter' & nullability > 0,
+      # once passed null
+      'Nullable',
+      ifelse(
+        use == 'parameter' &
+          (
+            type %in% c('Ljava/lang/String;',
+                        'Ljava/lang/CharSequence;') |
+              str_detect(type, '^\\[')
+          ),
+        'Unknown',
+        ifelse(
+          use == 'return' &
+            nullability < 0.05,
+          # low confidence in return null
+          ifelse(
+            type %in% c(
+              'Ljava/lang/Boolean;',
+              'Ljava/lang/Byte;',
+              'Ljava/lang/Character;',
+              'Ljava/lang/Float;',
+              'Ljava/lang/Integer;',
+              'Ljava/lang/Long;',
+              'Ljava/lang/Short;',
+              'Ljava/lang/Double;'
+            ),
+            'Unknown',
+            'NonNull'
+          ),
+          ifelse(
+            n.usage < min.n.usage,
+            # low support
+            'Unknown',
+            ifelse(
+              nullability < 0.05,
+              # heuristic on nullability
+              'NonNull',
+              ifelse(nullability > 0.5, # heuristic on nullability
+                     'Nullable',
+                     'Unknown')
+            )
+          )
+        )
+      )
+    )
+  ))
+}
+
+infer.nullness.multi <- function(inference, s) {
+  .r <- data.frame()
+  for (x in s) {
+    nullness.inferred <-
+      inference %>% infer.nullness(x) %>% mutate(min.n.usage = x)
+    .r <- .r %>% bind_rows(nullness.inferred)
+  }
+  return(.r)
+}
+
+infer.nullness.multi(
+  inference.merged %>%
+    filter.inference.jaif() %>%
+    left_join(
+      jar %>%
+        select(class,
+               name,
+               index,
+               type),
+      by = c('class', 'name', 'index')
+    ),
+  c(1, 3, 10, 30, 100, 300, 1000, 3000, 10000)
+) %>%
+  group_by(min.n.usage,
+           use,
+           nullness.actual,
+           nullness.usage) %>%
+  summarize(n = n()) %>%
+  ungroup() %>%
+  mutate(
+    predicted.actual = factor(
+      paste(nullness.usage, nullness.actual, sep = '.'),
+      levels = c(
+        'NonNull.NonNull',
+        'Unknown.NonNull',
+        'Nullable.NonNull',
+        'NonNull.Nullable',
+        'Unknown.Nullable',
+        'Nullable.Nullable'
+      )
+    ),
+    min.n.usage = as.factor(min.n.usage)
+  ) %>%
+  ggplot(aes(
+    x = min.n.usage,
+    y = n,
+    fill = predicted.actual,
+    label = n
+  )) +
+  facet_grid(. ~ use) +
+  geom_bar(stat = 'identity') +
+  geom_text(position = position_stack(vjust = 0.5), size = 3) +
+  scale_fill_manual(
+    name = 'predicted.actual',
+    breaks = c(
+      'NonNull.NonNull',
+      'Unknown.NonNull',
+      'Nullable.NonNull',
+      'NonNull.Nullable',
+      'Unknown.Nullable',
+      'Nullable.Nullable'
+    ),
+    labels = c(
+      'NonNull.NonNull',
+      'Unknown.NonNull',
+      'Nullable.NonNull',
+      'NonNull.Nullable',
+      'Unknown.Nullable',
+      'Nullable.Nullable'
+    ),
+    values = c(
+      '#339065',
+      '#5fc999',
+      '#9f51c3',
+      '#b576d1',
+      '#c25e48',
+      '#79392b'
+    )
+  ) +
+  theme_minimal() +
+  labs(title = 'nullability vs. jaif') +
+  theme(plot.title = element_text(hjust = 0.5))
+
+View(
+  inference.merged %>%
+    filter.inference.jaif() %>%
+    left_join(
+      jar %>%
+        select(class,
+               name,
+               index,
+               type),
+      by = c('class', 'name', 'index')
+    ) %>%
+    infer.nullness(1)
+)

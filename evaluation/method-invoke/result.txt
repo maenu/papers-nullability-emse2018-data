@@ -1,19 +1,17 @@
-> invokes
 # A tibble: 1 x 2
   methods invokes
     <int>   <int>
 1      67     124
 > ok
 # A tibble: 7 x 2
-                     comment     n
-                      <fctr> <int>
-1           cannot find call     2
-2            cannot identify     6
-3             dynamic invoke     2
-4 implicit super call? weird     2
-5                    missing     1
-6        param 2 is non-null     1
-7        param 3 is non-null     1
-> 
+                                                                                           comment     n
+                                                                                            <fctr> <int>
+1                                                                                 cannot find call     2
+2                                                                                  cannot identify     4
+3                                                                       implicit super call? weird     2
+4                                                                                          missing     1
+5                                                                              param 2 is non-null     1
+6 param 3 is non-null, same as above, probably bug because nullness is taken from value, not deref     1
+7                                                                                 synthetic method     2
 
-dynamic invoke 2 + 6 + 2, supers, one missed, 2 params from nullness
+dynamic invoke 2 + 4 + 2, supers, one missed, 2 params from nullness

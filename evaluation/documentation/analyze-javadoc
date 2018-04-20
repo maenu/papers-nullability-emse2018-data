@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python analyze_javadoc.py data/commons-io/ ../usage/commons-io-clean.csv commons-io-data.csv 
+python analyze_javadoc.py data/guava/ ../usage/guava-clean.csv guava-data.csv 
+python analyze_javadoc.py data/jre/ ../usage/jre-clean.csv jre-data.csv
