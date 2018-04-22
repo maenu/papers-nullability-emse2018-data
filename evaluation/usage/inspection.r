@@ -9,7 +9,7 @@ reduce.annotation <- function(nullness) {
   # verify that jaif is consistent
   nullness <- data.frame(nullness = nullness) %>%
     filter(nullness != 'Unknown',
-           nullness != '', !is.na(nullness)) %>%
+           nullness != '',!is.na(nullness)) %>%
     unique()
   if (nullness %>% nrow() == 1) {
     return(nullness %>%
@@ -29,7 +29,7 @@ reduce.nullness <- function(nullness) {
   # reduce nullness on overriden method return types, only one should be not unknown
   nullness <- data.frame(nullness = nullness) %>%
     filter(nullness != 'UNKNOWN',
-           nullness != '', !is.na(nullness)) %>%
+           nullness != '',!is.na(nullness)) %>%
     unique()
   if (nullness %>% nrow() == 1) {
     return(nullness %>%
@@ -124,7 +124,7 @@ read.definition <- function(artifact) {
         as.character(nullness.original),
         as.character(nullness.reduced)
       )) %>%
-      select(-nullness.reduced,-nullness.original) %>%
+      select(-nullness.reduced, -nullness.original) %>%
       unique() %>%
       filter(nullness != '') %>%
       ungroup() %>%
@@ -720,58 +720,92 @@ inference.merged <- merge.inference(inference)
 
 
 
-
-
-
-infer.nullness <- function(inference, min.n.usage) {
-  return(inference %>% mutate(
-    nullness.usage = ifelse(
-      use == 'parameter' & nullability > 0,
+infer.nullness.parameter <- function(inference, min.n.usage) {
+  return(inference %>% mutate(nullness.usage = ifelse(
+    use == 'parameter',
+    ifelse(
+      nullability > 0,
       # once passed null
       'Nullable',
       ifelse(
-        use == 'parameter' &
-          (
-            type %in% c('Ljava/lang/String;',
-                        'Ljava/lang/CharSequence;') |
-              str_detect(type, '^\\[')
-          ),
+        type %in% c(
+          'Ljava/lang/String;',
+          'Ljava/lang/CharSequence;',
+          'Ljava/lang/Boolean;',
+          'Ljava/lang/Byte;',
+          'Ljava/lang/Character;',
+          'Ljava/lang/Float;',
+          'Ljava/lang/Integer;',
+          'Ljava/lang/Long;',
+          'Ljava/lang/Short;',
+          'Ljava/lang/Double;'
+        ) |
+          str_detect(type, '^\\['),
         'Unknown',
         ifelse(
-          use == 'return' &
+          n.usage < min.n.usage,
+          # low support
+          'Unknown',
+          ifelse(
             nullability < 0.05,
-          # low confidence in return null
-          ifelse(
-            type %in% c(
-              'Ljava/lang/Boolean;',
-              'Ljava/lang/Byte;',
-              'Ljava/lang/Character;',
-              'Ljava/lang/Float;',
-              'Ljava/lang/Integer;',
-              'Ljava/lang/Long;',
-              'Ljava/lang/Short;',
-              'Ljava/lang/Double;'
-            ),
-            'Unknown',
-            'NonNull'
-          ),
-          ifelse(
-            n.usage < min.n.usage,
-            # low support
-            'Unknown',
-            ifelse(
-              nullability < 0.05,
-              # heuristic on nullability
-              'NonNull',
-              ifelse(nullability > 0.5, # heuristic on nullability
-                     'Nullable',
-                     'Unknown')
-            )
+            # heuristic on nullability
+            'NonNull',
+            ifelse(nullability > 0.5, # heuristic on nullability
+                   'Nullable',
+                   'Unknown')
           )
         )
       )
-    )
-  ))
+    ),
+    nullness.usage
+  )))
+}
+
+infer.nullness.return <- function(inference, min.n.usage) {
+  return(inference %>% mutate(nullness.usage = ifelse(
+    use == 'return',
+    ifelse(
+      nullability < 0.05,
+      # low confidence in return null
+      ifelse(
+        type %in% c(
+          'Ljava/lang/Boolean;',
+          'Ljava/lang/Byte;',
+          'Ljava/lang/Character;',
+          'Ljava/lang/Float;',
+          'Ljava/lang/Integer;',
+          'Ljava/lang/Long;',
+          'Ljava/lang/Short;',
+          'Ljava/lang/Double;'
+        ),
+        'Unknown',
+        'NonNull'
+      ),
+      ifelse(
+        n.usage < min.n.usage,
+        # low support
+        'Unknown',
+        ifelse(
+          nullability < 0.05,
+          # heuristic on nullability
+          'NonNull',
+          ifelse(nullability > 0.5, # heuristic on nullability
+                 'Nullable',
+                 'Unknown')
+        )
+      )
+    ),
+    nullness.usage
+  )))
+}
+
+infer.nullness <- function(inference, min.n.usage) {
+  return(
+    inference %>%
+      mutate(nullness.usage = NA) %>%
+      infer.nullness.parameter(min.n.usage) %>%
+      infer.nullness.return(min.n.usage)
+  )
 }
 
 infer.nullness.multi <- function(inference, s) {
