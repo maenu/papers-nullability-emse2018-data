@@ -117,31 +117,17 @@ filter.inference.both <- function(inference) {
 plot.distribution.internal.external <- function(inference.both) {
   return(
     inference.both %>%
-      group_by(use) %>%
-      mutate(use.label = paste0(
-        use,
-        ', N = ',
-        n(),
-        ', (',
-        sum(nullability.0),
-        ', ',
-        sum(nullability.01),
-        ', ',
-        sum(nullability.1),
-        ')'
-      )) %>%
-      ungroup() %>%
       mutate(internal.label = ifelse(
         internal == 'true', 'internal', 'external'
       )) %>%
       ggplot(aes(x = nullability)) +
-      facet_grid(internal.label ~ use.label) +
+      facet_grid(use ~ internal.label) +
       geom_histogram() +
       coord_cartesian(xlim = c(0, 1))  +
       scale_x_continuous(breaks = seq(0, 1, by = 0.2)) +
       scale_y_sqrt(breaks = c(1, 4, 10, 40, 100, 400, 1000, 4000, 10000)) +
       theme_minimal() +
-      labs(title = "Nullability, external vs. internal", y = 'methods') +
+      labs(y = 'methods (sqrt)') +
       theme(
         legend.position = 'bottom',
         plot.title = element_text(hjust = 0.5),
@@ -154,31 +140,15 @@ plot.distribution.internal.external <- function(inference.both) {
 plot.distribution.getter.processor <- function(inference.merged) {
   return(
     inference.merged %>%
-      filter(use == 'return') %>%
-      group_by(getter) %>%
-      mutate(
-        getter.label = paste0(
-          ifelse(getter, 'getter', 'processor'),
-          ' return, N = ',
-          n(),
-          ', (',
-          sum(nullability.0),
-          ', ',
-          sum(nullability.01),
-          ', ',
-          sum(nullability.1),
-          ')'
-        )
-      ) %>%
-      ungroup() %>%
+      mutate(getter.label = ifelse(getter, 'getter', 'processor')) %>%
       ggplot(aes(x = nullability)) +
-      facet_grid(. ~ getter.label) +
+      facet_grid(use ~ getter.label) +
       geom_histogram() +
       coord_cartesian(xlim = c(0, 1))  +
       scale_x_continuous(breaks = seq(0, 1, by = 0.2)) +
       scale_y_sqrt(breaks = c(1, 4, 10, 40, 100, 400, 1000, 4000, 10000)) +
       theme_minimal() +
-      labs(title = "Nullability, getter vs. processor", y = 'methods (sqrt)') +
+      labs(y = 'methods (sqrt)') +
       theme(
         legend.position = 'bottom',
         plot.title = element_text(hjust = 0.5),
@@ -191,29 +161,15 @@ plot.distribution.getter.processor <- function(inference.merged) {
 plot.distribution <- function (inference.merged) {
   return(
     inference.merged %>%
-      group_by(use) %>%
-      mutate(use.label = paste0(
-        use,
-        ', N = ',
-        n(),
-        ', (',
-        sum(nullability.0),
-        ', ',
-        sum(nullability.01),
-        ', ',
-        sum(nullability.1),
-        ')'
-      )) %>%
-      ungroup() %>%
       ggplot(aes(x = nullability)) +
-      facet_grid(. ~ use.label) +
+      facet_grid(. ~ use) +
       geom_histogram() +
       xlim(0, 1) +
       coord_cartesian(xlim = c(0, 1))  +
       scale_x_continuous(breaks = seq(0, 1, by = 0.2)) +
       scale_y_sqrt(breaks = c(1, 4, 10, 40, 100, 400, 1000, 4000, 10000)) +
       theme_minimal() +
-      labs(title = "Nullability", y = 'methods (sqrt)') +
+      labs(y = 'methods (sqrt)') +
       theme(
         legend.position = 'bottom',
         plot.title = element_text(hjust = 0.5),
@@ -298,7 +254,7 @@ plot.dereferences.methods <- function(inference) {
         values = c('#bae4bc', '#7bccc4', '#43a2ca')
       ) +
       theme_minimal() +
-      labs(title = "dereferences vs. methods", y = 'ratio') +
+      labs(y = 'ratio') +
       theme(
         legend.position = "bottom",
         plot.title = element_text(hjust = 0.5),
@@ -349,23 +305,27 @@ process <- function(artifact) {
     write.distribution(
       artifact,
       '-internal-external',
-      plot.distribution.internal.external(inference.both)
+      plot.distribution.internal.external(inference.both) +
+        labs(title = paste0('nullability, external vs. internal, ', artifact))
     )
   }
   write.distribution(
     artifact,
     '-getter-processor',
-    plot.distribution.getter.processor(inference.merged)
+    plot.distribution.getter.processor(inference.merged) +
+      labs(title = paste0('nullability, getter vs. processor, ', artifact))
   )
   write.distribution(artifact,
                      '',
-                     plot.distribution(inference.merged))
+                     plot.distribution(inference.merged) +
+                       labs(title = paste0('nullability, ', artifact)))
   if (artifact != 'jre') {
-    write.dereferences.methods(artifact, plot.dereferences.methods(inference.both))
+    write.dereferences.methods(artifact, plot.dereferences.methods(inference.both) +
+                                 labs(title = paste0('dereferences vs. methods, ', artifact)))
   } else {
-    write.dereferences.methods(artifact, plot.dereferences.methods(inference))
+    write.dereferences.methods(artifact, plot.dereferences.methods(inference) +
+                                 labs(title = paste0('dereferences vs. methods, ', artifact)))
   }
-  return()
 }
 
 process('guava')

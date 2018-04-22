@@ -453,7 +453,7 @@ merge.inference <- function(inference) {
           nullness.usage.non.null
         ),
         non.nullability.evidence = ifelse(
-          use == 'return',
+          use == 'parameter',
           nullness.usage.non.null,
           nullness.usage.null
         ),
@@ -684,42 +684,6 @@ write.usage.clean <- function(artifact, usage) {
   write.csv(usage, file = paste0('evaluation/usage/', artifact, '-clean.csv'))
 }
 
-process <- function(artifact) {
-  jar <- read.jar(artifact)
-  jaif <- read.jaif(artifact)
-  jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
-  definition <- read.definition(artifact)
-  usage <- read.usage(artifact)
-  coverage <-
-    combine.coverage(jar, jaif, jaif.integrity.disagree, definition, usage)
-  write.coverage(artifact, coverage)
-  inference <-
-    combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
-  inference.merged <- merge.inference(inference)
-  evaluate.performance.ground.truth.use(artifact, inference.merged)
-  write.usage.clean(artifact, usage)
-  return()
-}
-
-process('guava')
-process('commons-io')
-process('jre')
-
-artifact <- 'jre'
-jar <- read.jar(artifact)
-jaif <- read.jaif(artifact)
-jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
-definition <- read.definition(artifact)
-usage <- read.usage(artifact)
-coverage <-
-  combine.coverage(jar, jaif, jaif.integrity.disagree, definition, usage)
-write.coverage(artifact, coverage)
-inference <-
-  combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
-inference.merged <- merge.inference(inference)
-
-
-
 infer.nullness.parameter <- function(inference, min.n.usage) {
   return(inference %>% mutate(nullness.usage = ifelse(
     use == 'parameter',
@@ -727,35 +691,10 @@ infer.nullness.parameter <- function(inference, min.n.usage) {
       nullability > 0,
       # once passed null
       'Nullable',
-      ifelse(
-        type %in% c(
-          'Ljava/lang/String;',
-          'Ljava/lang/CharSequence;',
-          'Ljava/lang/Boolean;',
-          'Ljava/lang/Byte;',
-          'Ljava/lang/Character;',
-          'Ljava/lang/Float;',
-          'Ljava/lang/Integer;',
-          'Ljava/lang/Long;',
-          'Ljava/lang/Short;',
-          'Ljava/lang/Double;'
-        ) |
-          str_detect(type, '^\\['),
-        'Unknown',
-        ifelse(
-          n.usage < min.n.usage,
-          # low support
-          'Unknown',
-          ifelse(
-            nullability < 0.05,
-            # heuristic on nullability
-            'NonNull',
-            ifelse(nullability > 0.5, # heuristic on nullability
-                   'Nullable',
-                   'Unknown')
-          )
-        )
-      )
+      ifelse(n.usage < min.n.usage,
+             # low support
+             'Unknown',
+             'NonNull')
     ),
     nullness.usage
   )))
@@ -767,33 +706,11 @@ infer.nullness.return <- function(inference, min.n.usage) {
     ifelse(
       nullability < 0.05,
       # low confidence in return null
-      ifelse(
-        type %in% c(
-          'Ljava/lang/Boolean;',
-          'Ljava/lang/Byte;',
-          'Ljava/lang/Character;',
-          'Ljava/lang/Float;',
-          'Ljava/lang/Integer;',
-          'Ljava/lang/Long;',
-          'Ljava/lang/Short;',
-          'Ljava/lang/Double;'
-        ),
-        'Unknown',
-        'NonNull'
-      ),
-      ifelse(
-        n.usage < min.n.usage,
-        # low support
-        'Unknown',
-        ifelse(
-          nullability < 0.05,
-          # heuristic on nullability
-          'NonNull',
-          ifelse(nullability > 0.5, # heuristic on nullability
-                 'Nullable',
-                 'Unknown')
-        )
-      )
+      'NonNull',
+      ifelse(n.usage < min.n.usage,
+             # low support
+             'Unknown',
+             'Nullable')
     ),
     nullness.usage
   )))
@@ -818,89 +735,281 @@ infer.nullness.multi <- function(inference, s) {
   return(.r)
 }
 
-infer.nullness.multi(
-  inference.merged %>%
-    filter.inference.jaif() %>%
-    left_join(
-      jar %>%
-        select(class,
-               name,
-               index,
-               type),
-      by = c('class', 'name', 'index')
-    ),
-  c(1, 3, 10, 30, 100, 300, 1000, 3000, 10000)
-) %>%
-  group_by(min.n.usage,
-           use,
-           nullness.actual,
-           nullness.usage) %>%
-  summarize(n = n()) %>%
-  ungroup() %>%
-  mutate(
-    predicted.actual = factor(
-      paste(nullness.usage, nullness.actual, sep = '.'),
-      levels = c(
-        'NonNull.NonNull',
-        'Unknown.NonNull',
-        'Nullable.NonNull',
-        'NonNull.Nullable',
-        'Unknown.Nullable',
-        'Nullable.Nullable'
-      )
-    ),
-    min.n.usage = as.factor(min.n.usage)
-  ) %>%
-  ggplot(aes(
-    x = min.n.usage,
-    y = n,
-    fill = predicted.actual,
-    label = n
-  )) +
-  facet_grid(. ~ use) +
-  geom_bar(stat = 'identity') +
-  geom_text(position = position_stack(vjust = 0.5), size = 3) +
-  scale_fill_manual(
-    name = 'predicted.actual',
-    breaks = c(
-      'NonNull.NonNull',
-      'Unknown.NonNull',
-      'Nullable.NonNull',
-      'NonNull.Nullable',
-      'Unknown.Nullable',
-      'Nullable.Nullable'
-    ),
-    labels = c(
-      'NonNull.NonNull',
-      'Unknown.NonNull',
-      'Nullable.NonNull',
-      'NonNull.Nullable',
-      'Unknown.Nullable',
-      'Nullable.Nullable'
-    ),
-    values = c(
-      '#339065',
-      '#5fc999',
-      '#9f51c3',
-      '#b576d1',
-      '#c25e48',
-      '#79392b'
-    )
-  ) +
-  theme_minimal() +
-  labs(title = 'nullability vs. jaif') +
-  theme(plot.title = element_text(hjust = 0.5))
-
-View(
-  inference.merged %>%
-    filter.inference.jaif() %>%
-    left_join(
-      jar %>%
-        select(class,
-               name,
-               index,
-               type),
-      by = c('class', 'name', 'index')
+plot.performance.overview <- function(inference) {
+  return(
+    infer.nullness.multi(
+      inference %>%
+        filter.inference.jaif() %>%
+        left_join(
+          jar %>%
+            select(class,
+                   name,
+                   index,
+                   type),
+          by = c('class', 'name', 'index')
+        ),
+      c(1, 10, 100, 1000)
     ) %>%
-    infer.nullness(1)
-)
+      group_by(use) %>%
+      mutate(use.label = paste0(use, ', N = ', n())) %>%
+      ungroup() %>%
+      group_by(min.n.usage,
+               use,
+               use.label,
+               nullness.actual,
+               nullness.usage) %>%
+      summarize(n = n()) %>%
+      ungroup() %>%
+      mutate(
+        predicted.actual = factor(
+          paste(nullness.usage, nullness.actual, sep = '.'),
+          levels = c(
+            'NonNull.NonNull',
+            'Unknown.NonNull',
+            'Nullable.NonNull',
+            'NonNull.Nullable',
+            'Unknown.Nullable',
+            'Nullable.Nullable'
+          )
+        ),
+        min.n.usage = as.factor(min.n.usage)
+      ) %>%
+      ggplot(aes(
+        x = min.n.usage,
+        y = n,
+        fill = predicted.actual,
+        label = n
+      )) +
+      facet_grid(. ~ use.label) +
+      geom_bar(stat = 'identity') +
+      geom_text(position = position_stack(vjust = 0.5), size = 3) +
+      scale_fill_manual(
+        name = 'predicted.actual',
+        breaks = c(
+          'NonNull.NonNull',
+          'Unknown.NonNull',
+          'Nullable.NonNull',
+          'NonNull.Nullable',
+          'Unknown.Nullable',
+          'Nullable.Nullable'
+        ),
+        labels = c(
+          'NonNull.NonNull',
+          'Unknown.NonNull',
+          'Nullable.NonNull',
+          'NonNull.Nullable',
+          'Unknown.Nullable',
+          'Nullable.Nullable'
+        ),
+        values = c(
+          '#339065',
+          '#5fc999',
+          '#9f51c3',
+          '#b576d1',
+          '#c25e48',
+          '#79392b'
+        )
+      ) +
+      theme_minimal() +
+      labs(x = 'min usage', y = 'n') +
+      theme(plot.title = element_text(hjust = 0.5))
+  )
+}
+
+plot.performance.compatibility <- function(inference) {
+  .x <- infer.nullness.multi(
+    inference %>%
+      filter.inference.jaif() %>%
+      left_join(
+        jar %>%
+          select(class,
+                 name,
+                 index,
+                 type),
+        by = c('class', 'name', 'index')
+      ),
+    c(1, 10, 100, 1000)
+  ) %>%
+    group_by(use) %>%
+    mutate(use.label = paste0(use, ', N = ', n())) %>%
+    ungroup()
+  .y <- .x %>%
+    group_by(min.n.usage,
+             use,
+             use.label,
+             nullness.actual,
+             nullness.usage) %>%
+    summarize(n = n()) %>%
+    ungroup() %>%
+    mutate(
+      compatible = ifelse(
+        use == 'parameter',
+        nullness.usage == nullness.actual |
+          nullness.actual == 'Nullable',
+        nullness.usage == nullness.actual |
+          nullness.actual == 'NonNull'
+      ),
+      min.n.usage = as.factor(min.n.usage)
+    ) %>%
+    group_by(min.n.usage,
+             use,
+             use.label) %>%
+    summarize(
+      precision.exact = sum(n[nullness.usage == nullness.actual &
+                                nullness.usage != 'Unknown']) / (sum(n[nullness.usage == nullness.actual |
+                                                                         (nullness.usage != 'Unknown' &
+                                                                            nullness.usage != nullness.actual)])),
+      recall.exact = sum(n[nullness.usage == nullness.actual &
+                             nullness.usage != 'Unknown']) / (sum(n[nullness.usage == nullness.actual |
+                                                                      nullness.usage == 'Unknown'])),
+      r.compatible = sum(n[compatible &
+                             nullness.usage != 'Unknown']) / sum(n),
+      r.unknown = sum(n[nullness.usage == 'Unknown']) / sum(n),
+      r.incompatible = sum(n[!compatible &
+                               nullness.usage != 'Unknown']) / sum(n)
+    ) %>%
+    ungroup() %>%
+    gather(
+      key = 'type',
+      value = 'value',
+      precision.exact,
+      recall.exact,
+      r.compatible,
+      r.unknown,
+      r.incompatible
+    )
+  h_ <- .x %>%
+    filter(min.n.usage == 1) %>%
+    group_by(use,
+             use.label, nullness.actual) %>%
+    summarize(n = n()) %>%
+    ungroup() %>%
+    group_by(use) %>%
+    mutate(precision = n / sum(n)) %>%
+    arrange(desc(precision)) %>%
+    slice(1) %>%
+    ungroup()
+  return(
+    ggplot(.y, aes(x = min.n.usage, group = type)) +
+      facet_grid(. ~ use.label) +
+      geom_hline(data = h_, aes(yintercept = precision)) +
+      geom_text(
+        data = h_,
+        group = 1,
+        x = 0,
+        vjust = -1,
+        hjust = -3,
+        size = 3,
+        aes(y = precision,
+            label = nullness.actual)
+      ) +
+      geom_bar(
+        data = .y %>%
+          filter(type %in% c(
+            'r.compatible',
+            'r.unknown',
+            'r.incompatible'
+          )) %>%
+          mutate(type = factor(
+            type,
+            levels = c('r.incompatible',
+                       'r.unknown',
+                       'r.compatible'),
+            labels = c('incompatible',
+                       'unknown',
+                       'compatible')
+          )),
+        aes(y = value, fill = type),
+        stat = 'identity',
+        alpha = 0.5
+      ) +
+      geom_step(
+        data = .y %>%
+          filter(type == 'recall.exact'),
+        aes(y = value, color = 'recall')
+      ) +
+      geom_step(
+        data = .y %>%
+          filter(type == 'precision.exact'),
+        aes(y = value, color = 'precision')
+      ) +
+      scale_color_manual(
+        name = 'precision / recall',
+        breaks = c('precision',
+                   'recall'),
+        labels = c('precision',
+                   'recall'),
+        values = c('#713EA1',
+                   '#AD413F')
+      ) +
+      scale_fill_manual(
+        name = 'compatibility',
+        breaks = c('incompatible',
+                   'unknown',
+                   'compatible'),
+        labels = c('incompatible',
+                   'unknown',
+                   'compatible'),
+        values = c('#1B4D45',
+                   '#9A9A9A',
+                   '#349A8A')
+      ) +
+      theme_minimal() +
+      labs(x = 'min usage', y = 'ratio') +
+      theme(plot.title = element_text(hjust = 0.5))
+  )
+}
+
+write.performance.overview <-
+  function(artifact, performance.overview) {
+    performance.overview +
+      labs(title = paste0('prediction, ', artifact)) +
+      ggsave(
+        paste0('evaluation/usage/',
+               artifact,
+               '-performance-overview.pdf'),
+        width = 14,
+        height = 10,
+        units = 'cm'
+      )
+  }
+
+write.performance.compatibility <-
+  function(artifact, performance.compatibility) {
+    performance.compatibility +
+      labs(title = paste0('compatibility, ', artifact)) +
+      ggsave(
+        paste0(
+          'evaluation/usage/',
+          artifact,
+          '-performance-compatibility.pdf'
+        ),
+        width = 14,
+        height = 10,
+        units = 'cm'
+      )
+  }
+
+process <- function(artifact) {
+  jar <- read.jar(artifact)
+  jaif <- read.jaif(artifact)
+  jaif.integrity.disagree <- read.jaif.integrity.disagree(artifact)
+  definition <- read.definition(artifact)
+  usage <- read.usage(artifact)
+  coverage <-
+    combine.coverage(jar, jaif, jaif.integrity.disagree, definition, usage)
+  write.coverage(artifact, coverage)
+  inference <-
+    combine.inference(jar, jaif, jaif.integrity.disagree, definition, usage)
+  inference.merged <- merge.inference(inference)
+  #evaluate.performance.ground.truth.use(artifact, inference.merged)
+  write.usage.clean(artifact, usage)
+  write.performance.overview(artifact, plot.performance.overview(inference.merged))
+  write.performance.compatibility(artifact,
+                                  plot.performance.compatibility(inference.merged))
+  return()
+}
+
+process('guava')
+process('commons-io')
+process('jre')

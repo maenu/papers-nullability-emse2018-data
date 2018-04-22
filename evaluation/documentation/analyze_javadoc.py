@@ -158,6 +158,17 @@ class JavadocParser7(JavadocParser6):
             description = ''
             if descriptions:
                 description = '\n'.join(map(lambda x: x.get_text(), descriptions))
+            throws = []
+            throw_label = details.find('span', {
+                'class': 'throwsLabel'
+            })
+            if throw_label:
+                throw_root = throw_label.parent
+                throw_current = throw_label.parent.find_next_sibling('dd')
+                while throw_current and throw_current.find_previous_sibling('dt') is throw_root:
+                    throw_text = throw_current.get_text()
+                    throws.append(throw_text)
+                    throw_current = throw_current.find_next_sibling('dd')
             parameters = []
             parameter_label = details.find('span', {
                 'class': 'paramLabel'
@@ -178,6 +189,7 @@ class JavadocParser7(JavadocParser6):
                 return_text = return_label.parent.find_next_sibling('dd').get_text()
             index[method_key] = {
                 'description': re.sub(r'\s+', ' ', description).strip(),
+                'throws': [re.sub(r'\s+', ' ', throw).strip() for throw in throws],
                 'parameters': [re.sub(r'\s+', ' ', parameter).strip() for parameter in parameters],
                 'return': re.sub(r'\s+', ' ', return_text).strip()
             }
@@ -253,7 +265,7 @@ errors = 0
 with open(IN, 'rb') as f:
     reader = csv.DictReader(f)
     with open(OUT, 'wb') as g:
-        writer = csv.DictWriter(g, fieldnames=reader.fieldnames + ['constructor', 'documentation'])
+        writer = csv.DictWriter(g, fieldnames=reader.fieldnames + ['constructor', 'documentation', 'documentation.method.found', 'documentation.class.found', 'documentation.description', 'documentation.throws'])
         writer.writeheader()
         for row in reader:
             class_key = ''
@@ -266,6 +278,7 @@ with open(IN, 'rb') as f:
                     javadoc = read_javadoc(class_key)
                     index = index_javadoc(javadoc)
                     indexed_classes[class_key] = index
+                row['documentation.class.found'] = True
                 index_type = 'methods'
                 row['constructor'] = False
                 if row['name'].startswith('<init>'):
@@ -274,32 +287,26 @@ with open(IN, 'rb') as f:
                 signature = normalize_bytecode_signature(class_key.split('.')[-1], row['name'])
                 type_index = int(row['index'])
                 if signature in index[index_type]:
+                    row['documentation.method.found'] = True
                     documentation = index[index_type][signature]
+                    row['documentation.description'] = 'null' in documentation['description'].lower()
+                    row['documentation.throws'] = False
+                    for throw in documentation['throws']:
+                        if row['documentation.throws']:
+                            break
+                        row['documentation.throws'] = 'null' in throw.lower()
                     if type_index == -1:
-                        if 'return' in documentation and 'null' in documentation['return'].lower():
-                            row['documentation'] = 'MENTIONED'
-                        else:
-                            if 'null' in documentation['description']:
-                                row['documentation'] = 'MENTIONED_IN_GENERAL'
-                            else:
-                                row['documentation'] = 'NOT_MENTIONED'
+                        row['documentation'] = 'null' in documentation['return'].lower()
                     else:
-                        if 'parameters' in documentation and type_index in documentation['parameters'] and 'null' in documentation['parameters'][type_index].lower():
-                            row['documentation'] = 'MENTIONED'
-                        else:
-                            if 'null' in documentation['description']:
-                                row['documentation'] = 'MENTIONED_IN_GENERAL'
-                            else:
-                                row['documentation'] = 'NOT_MENTIONED'
+                        row['documentation'] = 'parameters' in documentation and type_index in documentation['parameters'] and 'null' in documentation['parameters'][type_index].lower()
                     successes = successes + 1
                 else:
-                    row['documentation'] = 'METHOD_NOT_FOUND'
+                    row['documentation.method.found'] = False
                     not_found = not_found + 1
             except IOError as error:
-                row['documentation'] = 'CLASS_NOT_FOUND'
+                row['documentation.method.found'] = False
                 not_found = not_found + 1
             except Exception as exception:
-                row['documentation'] = 'ERROR'
                 errors = errors + 1
                 print >> sys.stderr, 'ERROR', exception, class_key, signature
                 traceback.print_exc(file=sys.stderr)
